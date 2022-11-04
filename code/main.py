@@ -167,7 +167,7 @@ def tournament_menu(i):
 
 
 def specific_player_menu(player : Player):
-    print("Write the name of the player you want to check " + players_list[player_id-1].name + "'s W/L ratio against.")
+    print("Write the name of the player you want to check " + player.name + "'s W/L ratio against.")
 
     name_against = input("Choice: ")
 
