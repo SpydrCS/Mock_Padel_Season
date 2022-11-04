@@ -8,7 +8,7 @@ class Match:
         self.score = score
 
     def __str__(self):
-        return f"Level {self.level}: {self.players[0]} and {self.players[1]} vs {self.players[2]} and {self.players[3]}"
+        return f"Level {self.level}: {self.players[0].name} and {self.players[1].name} vs {self.players[2].name} and {self.players[3].name}"
 
     def add_player(self, player):
         self.players.append(player)

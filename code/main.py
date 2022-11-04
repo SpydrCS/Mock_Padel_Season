@@ -3,6 +3,8 @@ from matches import *
 from players import *
 from tournaments import *
 
+from typing import Union
+
 # club, past tournaments and past matches added later
 p1 = Player('Dorisa A.', 79, 'F', 'R', 4, 46, 32)
 p2 = Player('Grayce B.', 68, 'F', 'R', 3, 46, 34)
@@ -88,70 +90,164 @@ def populate():
 
     #p3.get_record_against_player("Ariadne")
 
-def extra_menu(i):
+
+def sort_by_level(player: Union[Player,Match]) -> int:
+    return player.level
+
+def main_tournament_menu():
+    print("\n -------------------------- \n")
+    for (i, tour) in enumerate(tournaments_list):
+        print(str(i+1), ": ", tour)
+
+    print("\nInsert the number of the tournament to see more details. To exit, insert 0.")
+
+    i = int(input("Choice: "))
+
+    print("\n -------------------------- \n")
+
+    if i == 0:
+        return
+    else:
+        print("Name: " + tournaments_list[i-1].name)
+        print("Location: " + tournaments_list[i-1].location)
+        print("Start date: " + tournaments_list[i-1].start_date)
+        print("End date: " + tournaments_list[i-1].end_date)
+        print("Number of registered players: " + str(len(tournaments_list[i-1].players)))
+        print("Number of matches: " + str(len(tournaments_list[i-1].matches)))
+        print("To go more in depth, insert 1. To exit, insert 0.")
+
+    info2 = int(input("Choice: "))
+
+    print("\n -------------------------- \n")
+
+    if info2 == 0:
+        return
+    
+    if info2 == 1:
+        tournament_menu(i)
+        print("\n -------------------------- \n")
+
+    print("To see list of tournaments again, press 1. To go to main menu, press 2. To exit, press 0.")
+
+    choice = int(input("Choice: "))
+
+    if choice == 0:
+        return
+    elif choice == 1:
+        main_tournament_menu()
+    elif choice == 2:
+        print("\n -------------------------- \n")
+        menu()
+
+
+def tournament_menu(i):
     print("To see the name of all the players and their according catergories, insert 1. To see all the matches, insert 2. To exit, insert 0.")
         
-    info3 = int(input())
+    info3 = int(input("Choice: "))
 
     if info3 == 0: 
         return
 
     elif info3 == 1:
         #see players and categories
-        for (ind, player) in enumerate(tournaments_list[i-1].players):
+        play_list = tournaments_list[i-1].players
+        play_list.sort(key=sort_by_level)
+        for (ind, player) in enumerate(play_list):
             print(str(ind+1), ": ", player)
 
 
     elif info3 == 2:
         #see matches
+        match_list = tournaments_list[i-1].matches
+        match_list.sort(key=sort_by_level)
         for match in tournaments_list[i-1].matches:
             print(match)
-            print("\n")
 
-    extra_menu(i)
+
+def specific_player_menu(player_id):
+    print("\n -------------------------- \n")
+
+    print("Write the name of the player you want to check " + players_list[player_id-1].name + "'s W/L ratio against.")
+
+    name_against = input("Choice: ")
+
+    players_list[player_id-1].get_record_against_player(name_against)
+
+
+def past_partners_menu(player_id):
+    print("\n -------------------------- \n")
+
+    players_list[player_id-1].get_past_partners()
+
+
+
+def main_player_menu():
+    for (i, player) in enumerate(players_list):
+        print(str(i+1), ": ", player)
+
+    print("\n -------------------------- \n")
+
+    print("Insert the number of the player to see more details. To exit, insert 0.")
+
+    player_id = int(input("Choice: "))
+
+    if player_id == 0:
+        return
+
+    print("\n -------------------------- \n")
+
+    print("Name: " + players_list[player_id-1].name)
+    print("Age: " + str(players_list[player_id-1].age))
+    print("Sex: " + players_list[player_id-1].sex)
+    print("Dominant hand: " + players_list[player_id-1].dominant_hand)
+    print("Level: " + str(players_list[player_id-1].level))
+    print("Wins/Losses: " + str(players_list[player_id-1].wins) + "/" + str(players_list[player_id-1].losses))
+    print("Club: ", players_list[player_id-1].club)
+    print("Number of tournaments played: " + str(len(players_list[player_id-1].tournaments)))
+    print("Number of matches played: " + str(len(players_list[player_id-1].matches)))
+    print("\n -------------------------- \n")
+
+    print("To check the win/loss against a specific player, insert 1. To view their past partners, press 2. To exit, insert 0.")
+
+    inp = int(input("Choice: "))
+
+    if inp == 0:
+        return
+    
+    elif inp == 1:
+        specific_player_menu(player_id)
+
+    elif inp == 2:
+        past_partners_menu(player_id)
+
+    print("\n -------------------------- \n")
+
+    print("To see list of players again, press 1. To go to main menu, press 2. To exit, press 0.")
+
+    choice = int(input("Choice: "))
+
+    if choice == 0:
+        return
+    elif choice == 1:
+        main_player_menu()
+    elif choice == 2:
+        print("\n -------------------------- \n")
+        menu()
+
 
 def menu():
     print("Hello, to see all the tournaments, insert 1. To see all players, insert 2. To exit, insert 0.")
-    inpt = int(input())
-
-    print("\n -------------------------- \n")
+    inpt = int(input("Choice: "))
 
     if inpt == 0:
         return
 
     elif inpt == 1:
-        for (i, tour) in enumerate(tournaments_list):
-            print(str(i+1), ": ", tour)
-
-        print("\nInsert the number of the tournament to see more details. To exit, insert 0.")
-
-        i = int(input())
-
-        print("\n -------------------------- \n")
-
-        if i == 0:
-            return
-        else:
-            print("Name: " + tournaments_list[i-1].name)
-            print("Location: " + tournaments_list[i-1].location)
-            print("Start date: " + tournaments_list[i-1].start_date)
-            print("End date: " + tournaments_list[i-1].end_date)
-            print("Number of registered players: " + str(len(tournaments_list[i-1].players)))
-            print("Number of matches: " + str(len(tournaments_list[i-1].matches)))
-            print("To go more in depth, insert 1. To exit, insert 0.")
-            print("\n -------------------------- \n")
-
-        info2 = int(input())
-        if info2 == 0:
-            return
-        
-        extra_menu(i)
+        main_tournament_menu()
 
     elif inpt == 2:
-        print("\n -------------------------- \n")
-        for (indx, player) in enumerate(players_list):
-            print(str(indx+1), ": ", player)
+        main_player_menu()
 
-
+        
 populate()
 menu()
