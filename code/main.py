@@ -62,11 +62,16 @@ t8 = Tournament('gylmtw Padel Open', 'Argentina', '33-34-5205', '00-55-4847', [p
 t9 = Tournament('ghbbsq Padel Open', 'China', '54-17-4521', '64-64-8708', [p9,p10,p5,p6], [m9])
 t10 = Tournament('djjorj Padel Open', 'China', '04-53-2835', '08-69-7914', [p4,p5,p7,p8], [m10])
 
+def sort_by_level(player: Union[Player,Match]) -> int:
+    return player.level
+
 players_list = [p1,p2,p3,p4,p5,p6,p7,p8,p9,p10]
+players_list.sort(key=sort_by_level)
 
 clubs_list = [c1,c2,c3,c4,c5,c6,c7,c8,c9,c10]
 
 matches_list = [m1,m2,m3,m4,m5,m6,m7,m8,m9,m10]
+matches_list.sort(key=sort_by_level)
 
 tournaments_list = [t1,t2,t3,t4,t5,t6,t7,t8,t9,t10]
 
@@ -90,9 +95,6 @@ def populate():
 
     #p3.get_record_against_player("Ariadne")
 
-
-def sort_by_level(player: Union[Player,Match]) -> int:
-    return player.level
 
 def main_tournament_menu():
     print("\n -------------------------- \n")
@@ -164,21 +166,28 @@ def tournament_menu(i):
             print(match)
 
 
-def specific_player_menu(player_id):
-    print("\n -------------------------- \n")
-
+def specific_player_menu(player : Player):
     print("Write the name of the player you want to check " + players_list[player_id-1].name + "'s W/L ratio against.")
 
     name_against = input("Choice: ")
 
-    players_list[player_id-1].get_record_against_player(name_against)
+    player.get_record_against_player(name_against)
 
 
-def past_partners_menu(player_id):
-    print("\n -------------------------- \n")
+def past_partners_menu(player : Player):
+    player.get_past_partners()
 
-    players_list[player_id-1].get_past_partners()
 
+def past_tournaments_menu(player : Player):
+    for (i, tourn) in enumerate(player.tournaments[::4]):
+        print(str(i+1), ": ", tourn)
+
+
+def past_matches_menu(player : Player):
+    player_matches = player.matches[::4]
+    player_matches.sort(key=sort_by_level)
+    for (i, match) in enumerate(player_matches):
+        print(str(i+1), ": ", match)
 
 
 def main_player_menu():
@@ -207,18 +216,26 @@ def main_player_menu():
     print("Number of matches played: " + str(len(players_list[player_id-1].matches)))
     print("\n -------------------------- \n")
 
-    print("To check the win/loss against a specific player, insert 1. To view their past partners, press 2. To exit, insert 0.")
+    print("To check the win/loss against a specific player, insert 1. To view their past partners, press 2. To view past tournaments, press 3. To view past matches, press 4. To exit, insert 0.")
 
     inp = int(input("Choice: "))
+
+    print("\n -------------------------- \n")
 
     if inp == 0:
         return
     
     elif inp == 1:
-        specific_player_menu(player_id)
+        specific_player_menu(players_list[player_id-1])
 
     elif inp == 2:
-        past_partners_menu(player_id)
+        past_partners_menu(players_list[player_id-1])
+
+    elif inp == 3:
+        past_tournaments_menu(players_list[player_id-1])
+
+    elif inp == 4:
+        past_matches_menu(players_list[player_id-1])
 
     print("\n -------------------------- \n")
 
@@ -238,6 +255,8 @@ def main_player_menu():
 def menu():
     print("Hello, to see all the tournaments, insert 1. To see all players, insert 2. To exit, insert 0.")
     inpt = int(input("Choice: "))
+
+    print("\n -------------------------- \n")
 
     if inpt == 0:
         return
