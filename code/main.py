@@ -179,12 +179,12 @@ def past_partners_menu(player : Player):
 
 
 def past_tournaments_menu(player : Player):
-    for (i, tourn) in enumerate(player.tournaments[::4]):
+    for (i, tourn) in enumerate(player.tournaments[::4]):  # [::4] because for some reason it is inserting tournaments 4x in list
         print(str(i+1), ": ", tourn)
 
 
 def past_matches_menu(player : Player):
-    player_matches = player.matches[::4]
+    player_matches = player.matches[::4] # [::4] because for some reason it is inserting matches 4x in list
     player_matches.sort(key=sort_by_level)
     for (i, match) in enumerate(player_matches):
         print(str(i+1), ": ", match)
